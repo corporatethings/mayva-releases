@@ -6,6 +6,16 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ---
 
+## [0.2.3] — 2026-06-02
+
+First release published to the public mirror repo (`corporatethings/mayva-releases`). Same Mayva you already had — this version exists to wire the auto-updater channel and download surface for external users. One small visible change carries over from work that landed after the v0.2.0 build was cut:
+
+### Changed
+
+- **Meetings tab folded into the Calendar view; the calendar grid now spans the full 24-hour day.** The standalone MEETINGS sidebar entry is gone — Google Calendar events render as cyan blocks on the Calendar grid alongside scheduled tasks. The grid hour-range expands from 06:00–22:00 to 00:00–24:00 so red-eye flights, overnight events, and late-night editor sessions don't drop off the canvas. The Today dashboard's MEETINGS TODAY summary card stays unchanged.
+
+---
+
 ## [0.2.0] — 2026-06-01
 
 ### New
