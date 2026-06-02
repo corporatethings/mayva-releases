@@ -8,12 +8,17 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ## [0.2.4] — 2026-06-02
 
+### New
+
+- **Windows beta build is now available** (`Mayva Setup 0.2.4.exe`, x64, ~104 MB). Same Mayva you know from macOS — calendar, inbox, tasks, brief, AI workflows — running natively on Windows 10/11. Download from the release page and run the installer; you'll see a Windows SmartScreen "unrecognized app" warning the first time (this build is not yet code-signed). Click **More info → Run anyway** to install. Code signing is on the roadmap and will remove the warning. Auto-update isn't wired on Windows yet — re-download for new versions until then.
+- **OAuth consent tabs now auto-close and bring Mayva to the front.** After you grant consent on Google's / Whoop's screen, the callback page tries to close the browser tab and pulls the Mayva window forward so you land back in the app automatically. Some browsers block auto-close for tabs they didn't open, so the page also shows a styled "Connected — you can close this tab" confirmation as the fallback.
+
 ### Security
 
 - **Electron updated from 32 to 38.8.6**, picking up three high-severity patches: a renderer command-line switch injection, a use-after-free in `WebContents` fullscreen / pointer-lock / keyboard-lock callbacks, and a use-after-free in `PowerMonitor` on Windows + macOS. None of these CVEs were known to be exploited against Mayva in the wild, but Electron's deprecation policy means staying current is the only safe posture — installed v0.2.3 builds should auto-update to this version on next launch.
 - **Several build-pipeline dependencies bumped via `pnpm.overrides`** (`tar` to ≥7.5.11, `tmp` to ≥0.2.6, `undici` to ≥6.24.0). Those are dev-time only (electron-builder's signing pipeline), never shipped in the installer, but cleaned up to keep the audit log tidy.
 
-No user-facing UI changes. If your installed copy of v0.2.3 doesn't prompt to update, restart Mayva — the auto-updater polls on launch.
+If your installed copy of v0.2.3 doesn't prompt to update, restart Mayva — the auto-updater polls on launch.
 
 ---
 
