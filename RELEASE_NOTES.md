@@ -6,6 +6,23 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ---
 
+## [0.2.5] — 2026-06-03
+
+### New
+
+- **Guided first-run setup, then a tour of the app.** A new install now lands in a six-step wizard that handles permissions, your AI provider, Google (Calendar + Gmail in one click), Whoop, and a 90-day data backfill — every step is skippable. The moment you finish, Mayva walks you through the five surfaces you'll use most via a spotlight tour: sidebar nav → Insights → Tasks → Recommendations → Settings. The tour fires once on the first dashboard render; you can replay it any time from the new **TAKE THE TOUR** button at the top of every Settings page (visible even after everything is connected, for when you want to refresh your memory or show someone else around).
+- **Windows installer (`Mayva Setup 0.2.5.exe`, x64, ~104 MB).** This is the first version where the Windows download is at full parity with macOS — wizard + tour + OAuth consent flow all behave the same as on Mac. Same install caveats apply: Windows SmartScreen will warn the first time ("unrecognized app" → click **More info → Run anyway**) until we ship a code-signed build.
+
+### Changed
+
+- **OAuth consent tabs now auto-close and bring Mayva back to the front.** After granting consent on Google or Whoop, the callback page tries to close the browser tab and pulls the Mayva window forward so you don't have to alt-tab back. Browsers that block tab auto-close (Chrome / Safari for tabs they didn't open) show a graceful "Connected — you can close this tab" confirmation instead.
+
+### Platform notes
+
+- **macOS users:** v0.2.5 ships Windows-only today. Your auto-updater will continue to show v0.2.4 as the latest Mac build until a Mac DMG is tagged for v0.2.5; everything in this release section ships to Mac too the next time we cut a Mac DMG.
+
+---
+
 ## [0.2.4] — 2026-06-02
 
 ### New
