@@ -6,6 +6,30 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ---
 
+## [0.3.0] — 2026-06-05
+
+### New
+
+- **Apple Calendar is now a connectable integration.** iCloud calendars sit alongside Google Calendar as a first-class source — Mayva reads, writes, reschedules, and deletes events over CalDAV.
+- **Settings → Integrations → Apple Calendar.** A new row between Google Calendar and Gmail lets you CONNECT, SYNC NOW, or DISCONNECT. The connect modal asks for your Apple ID and an app-specific password (with a link out to appleid.apple.com → Security). Credentials live in the OS keychain — never in a config file, never in logs.
+- **Calendar view and Today widget now show Google and Apple events together.** The weekly grid and the MEETINGS TODAY card merge both providers in one view so you don't flip between apps to see your day.
+- **Per-event provider chips.** Each event row carries a tiny `G` (lime) or `A` (indigo) chip so you see at a glance which calendar it came from. Daily legend shows per-provider counts.
+- **Cross-provider duplicates are collapsed.** When the same meeting lives on both your Google and iCloud calendars (typical for shared invites), Mayva renders it once with both chips stacked beside each other.
+- **Conflict detection works across providers.** A Google standup that overlaps an iCloud lunch block now raises one conflict — the recommendation engine doesn't care which calendar an event lives on.
+- **Apple sync runs every 30 minutes in the background**, pulling only the delta on subsequent ticks. You can also force a pull from SYNC NOW at any time.
+- **Write actions land on iCloud, not just Google.** Approving a `create`, `reschedule`, or `delete` recommendation against an Apple event updates iCloud directly — full parity with what Mayva already did on Google.
+- **Re-authenticate prompt when Apple rotates credentials.** If iCloud starts rejecting your app-specific password, the Settings row swaps SYNC for a RE-AUTHENTICATE CTA plus an amber warning pill. Your local Apple event history is preserved while you reconnect.
+
+### Changed
+
+- **Calendar view is multi-provider by default.** Every event renders with a provider chip and every day's legend breaks down by provider. Google-only users see no difference; users with iCloud connected get a single unified view.
+
+### Known limits
+
+- **Editing a single occurrence of a recurring iCloud event isn't supported in v1.** Mayva will ask you to edit the whole series (or open Calendar.app for that one occurrence). Google recurring events are unaffected.
+
+---
+
 ## [0.2.5] — 2026-06-03
 
 ### New
