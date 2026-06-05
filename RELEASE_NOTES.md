@@ -6,6 +6,21 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ---
 
+## [0.4.3] — 2026-06-05
+
+### Fixed
+- **Ask Mayva — the Approve / Dismiss card no longer disappears the moment Mayva finishes talking.** When Mayva proposed an action (create a task, schedule a meeting, send a reply), the inline approval card used to vanish before you could click — you had to navigate to Control Centre to find it. Now it stays put until you actually pick a button, with a brief "Done." / "Skipped." confirmation when you do.
+- **Ask Mayva — approving a "create task" request actually creates the task now.** If you said something like "schedule baby's Delhi medical day on June 11" and approved the card, the action used to silently fail in Control Centre. Mayva is now smarter about date formats — date-only inputs land at 9 am for scheduled tasks and 5 pm for deadlines, plain-English dates like "Thu, Jun 11" work too.
+- **Ask Mayva — "any critical tasks?" / "any critical goals?" now finds them.** Two related bugs made high-priority items invisible: tasks without a specific clock time were getting filtered out, and goal searches were matching the literal word "critical" instead of the criticality field. Mayva now surfaces structured criticality correctly, and falls back to "high" automatically when "critical" returns nothing.
+- **Ask Mayva — clicking "New chat" repeatedly no longer fills the sidebar with empty rows.** The button now reuses the existing untouched chat instead of creating duplicates.
+- **Ask Mayva — composer stays empty after picking a preset prompt.** The textbox was leaving the preset text behind; now it clears so you can type the next question right away.
+
+### Changed
+- **Ask Mayva — Delete chat is now a one-click action.** A trash icon appears on the right edge of each session row in the sidebar. The right-click menu's "Archive" was relabelled "Delete chat" to match how it actually feels. Deleting the currently-open chat falls back to the most recent remaining one.
+- **Ask Mayva — chats interpret what you mean.** The assistant has new instructions to map natural words ("critical", "urgent", "on my plate", "stale", "slipping") to the right structured filters, and to try one wider search automatically before saying "nothing found" — so questions like "any critical goals?" get a real answer instead of a "want me to widen?" prompt.
+
+---
+
 ## [0.4.2] — 2026-06-05
 
 ### Changed
