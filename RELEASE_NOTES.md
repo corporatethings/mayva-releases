@@ -6,6 +6,44 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ---
 
+## [0.4.1] — 2026-06-05
+
+### Fixed
+- Ask Mayva no longer drops `<redacted-internal>` markers into chat replies. The output rewrite that produced them is gone — Mayva is local-first and a chat reply is you reading your own data on your own machine, so there is nothing to hide. Your nouns ("tasks", "goals", "this week", "my recovery") flow through verbatim.
+
+### Changed
+- Ask Mayva now runs tool calls in parallel within the same reply. When a question needs more than one lookup — "show me approvals AND my recovery this month" — Mayva fires every tool at once instead of one after another. Replies feel noticeably faster on multi-tool questions.
+
+---
+
+## [0.4.0] — 2026-06-05
+
+### New
+- **Ask Mayva — the chat agent that knows you.** A new chat surface at the top of the sidebar. Type "close the baby name task" and Mayva queues it for your approval with an inline card; ask "compare my recovery this month vs last" and a chart renders right there in the conversation; say "send reminders to this Discord webhook" and it walks you through a confirm-before-overwrite. Multi-session sidebar like Claude, streaming tokens with a blinking cursor, follow-up suggestion chips after each response. Scope-locked to your local Mayva data — Ask Mayva won't answer trivia, won't browse the web, won't write your code; it knows your sleep, your goals, your tasks, your inbox, and won't sugar-coat what they add up to.
+- **Tune Mayva's tone.** Settings → Chat → "How direct do you want me to be?" — a 3-chip picker (Gentle / **Balanced** / Direct, default Balanced — warm, light wit, honest even when uncomfortable). 👍 / 👎 on any chat response silently adjusts the tone over time; no learning UI, no acknowledgment — just better replies tomorrow.
+- **Profile wizard.** Set up your Identity, Preferences, Roles, and People in under 90 seconds without typing prose. Four chip-pick sub-wizards, each with a status pill on the Profile page (EMPTY / PARTIAL / COMPLETE). Hand-typed notes you've added previously stay verbatim; an expert-mode toggle keeps the raw-markdown editor for power users.
+- **Webhook notifications — Slack, Discord, Microsoft Teams.** Paste a webhook URL in Settings → Integrations → Notification Channels and every reminder / approval / morning-brief Mayva fires fans out to that channel alongside the desktop banner. Per-platform Test buttons, URL-shape validation on paste, a one-screen privacy confirmation before saving. Rate-limit retries with exponential backoff so a busy Slack workspace doesn't drop your reminders.
+- **Search across Tasks and Goals.** Single search bar at the top of the Tasks page filters both panes in lockstep. Tokenized — `call mom` matches anything containing both words; `"call mom"` requires the exact phrase. 150ms debounced; Escape clears.
+
+### Changed
+- The renderer's Sentry SDK now uses Electron IPC for transport (via the platform's official preload) so crash reports flow even when Content Security Policy blocks the SDK's fallback fetch path. Same opt-in posture — disabled by default.
+
+### Fixed
+- Renderer black screen on launch caused by a top-level static import of `@sentry/electron/renderer` in the React error boundary. The SDK now lazy-loads on first capture so a problem inside the Sentry module can never block the renderer's initial mount.
+
+---
+
+## [0.3.1] — 2026-06-05
+
+### New
+- Mayva now offers **opt-in crash reporting**. Off by default. Enable it under **Settings → System → Diagnostics → Send crash reports** to help us fix bugs faster — only stack traces and runtime metadata flow out. Your tasks, emails, calendar events, prompts, attendees, and locations never leave the device. Identity in the report is an anonymous UUID generated on your machine; turning the switch OFF tears down the client within the same tick.
+- A **"Send a test event"** button appears under Diagnostics when reporting is ON, so you can verify the round-trip ends up in our Sentry project before relying on it for a real bug.
+
+### Changed
+- Privacy policy clarified to spell out the redaction rules the new crash-reporting toggle uses — emails, OAuth tokens, file paths under your home directory, and any payload-shaped extras (`prompt` / `body` / `subject` / `snippet` / etc.) are stripped at the SDK level before egress.
+
+---
+
 ## [0.3.0] — 2026-06-05
 
 ### New
