@@ -6,6 +6,18 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ---
 
+## [0.4.2] — 2026-06-05
+
+### Changed
+- **Ask Mayva — chats are titled by what you asked.** The sidebar used to show every conversation as "New chat" — useless once you had a few open. Now the first message you send becomes the title, capitalised and trimmed to fit. A title you've set yourself is never overwritten.
+- **Ask Mayva — your message lands on screen the instant you send it.** Previously the bubble didn't appear until Mayva finished thinking. Now it paints immediately, and the lime-dot animation runs beside it while the response is being prepared.
+- **Ask Mayva — the home screen has a face.** A calm, stylised portrait replaces the generic chat icon on the empty state. Same lime/zinc palette as the rest of the app, no extra download.
+
+### Fixed
+- Removed a developer-console warning on Control Centre's "On your plate" task rows. No visible behaviour change; cleaner internals.
+
+---
+
 ## [0.4.1] — 2026-06-05
 
 ### Fixed
