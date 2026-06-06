@@ -6,6 +6,17 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ---
 
+## [0.4.5] — 2026-06-06
+
+### Fixed
+- **Diagnostics — crash reports actually reach Sentry now.** v0.4.4 fixed the build-time DSN bake, but `@sentry/electron`'s default IPC mode needed to register a custom protocol scheme before the Electron app reached its 'ready' event — and Mayva's init runs after that point (we need the DB open + the env hydrated first). Switched to Classic IPC mode, which uses standard `ipcMain`/`ipcRenderer` instead. Toggle **Settings → System → Diagnostics → Send crash reports** ON and events flow as designed.
+- **Email previews — Content Security Policy violations from tracking pixels + marketing images no longer get reported as Mayva crashes.** Chromium correctly blocking external images embedded in email HTML is the policy working as designed; the renderer console-error forwarder now filters those out instead of paging on every newsletter you open.
+
+### Changed
+- **DevTools no longer pops open every time the dev build starts.** Use Cmd/Ctrl+Option+I to open it on demand. End-user shipped DMGs are unaffected (DevTools was never auto-opened in production).
+
+---
+
 ## [0.4.4] — 2026-06-06
 
 ### Fixed
