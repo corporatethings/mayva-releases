@@ -6,6 +6,20 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ---
 
+## [0.4.6] — 2026-06-06
+
+### New
+- **Ask Mayva — fill in missing details right in the conversation.** Say "schedule baby's Delhi medical day" and instead of Mayva asking "what time?" in a back-and-forth, a small form lands in the chat with the fields it still needs (when, how long, priority) and a "From what you said" summary of what it already figured out. Hit Continue, the action queues for your approval right there in the chat, and you pick Approve to run it. No more navigating to Control Centre to finish what you started.
+- **Ask Mayva — opens on a fresh page every time.** Clicking Ask Mayva now lands on the home/empty state by default rather than auto-reopening your last conversation. Past chats are one click away in the sidebar.
+
+### Fixed
+- **Version pill in the topbar now shows the actual version.** Previously hardcoded "v0.2.5" on both the topbar and Login screen — drifted past every release since. Reads from the live `package.json` now.
+
+### Changed
+- **Refreshed product tour.** Now covers Ask Mayva, the merged Google + Apple calendar view, and the audit log alongside the original sidebar / insights / tasks / approvals / settings stops. Each stop has a small illustrative vignette. Replayable any time from "TAKE THE TOUR" at the top of every Settings pane.
+
+---
+
 ## [0.4.5] — 2026-06-06
 
 ### Fixed
