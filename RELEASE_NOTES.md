@@ -6,6 +6,13 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ---
 
+## [0.4.4] — 2026-06-06
+
+### Fixed
+- **Diagnostics — crash reports now actually reach Sentry on shipped builds.** A long-standing build-time substitution bug meant the Sentry DSN was being silently dropped from every release — your errors hit Discord (which uses a different runtime-hydrated URL) but never reached Sentry. Toggle the switch under **Settings → System → Diagnostics → Send crash reports** ON and events flow as designed; toggle it OFF and Sentry tears down inside the same tick. Identity in the report is still the anonymous install UUID; nothing else changes.
+
+---
+
 ## [0.4.3] — 2026-06-05
 
 ### Fixed
