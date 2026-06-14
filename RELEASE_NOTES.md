@@ -6,6 +6,125 @@ Downloads live at: https://github.com/corporatethings/mayva-releases/releases
 
 ---
 
+## [0.8.0] — 2026-06-14
+
+### New
+
+- **Agents — hand a goal to a fleet of coding agents.** A new **AGENTS** tab opens a split view: a list of agents and their tasks on the left, and the selected agent's **live terminal** on the right — a real `claude` / `codex` session you can watch and type into. Give a goal to a lead agent and it breaks the work into a dependency graph, spins up a worker per task (each isolated in its own git worktree), reviews its own plan before running, and consolidates the results. Pause, resume, restart-with-extra-instructions, or delete any agent from its row.
+- **Agents can propose real actions, but never act on their own.** A worker can read your Mayva memory and propose an email, a calendar event, or a task — but every effect lands in your approval queue first, and the worker waits for your decision. Risky actions auto-deny if you don't respond within 30 minutes, so nothing fires silently. Spend caps and rate limits keep a runaway backend in check.
+- **Nightly coach.** Every night Mayva scores your day across health, work, and goals against your own baselines and writes a short, number-backed verdict in a consistent voice. The Insights page now opens with last night's read — overall score and tone, a per-area breakdown, a 14-day trend line, and any active streaks. Your morning brief carries the verdict forward as one concrete next step. Everything stays on your machine.
+- **Insights engine — Mayva spots cross-silo patterns.** A daily pass surfaces things no single view would catch: meetings that line up with elevated stress, drift between your stated work rhythm and when you actually work, a sleep window sliding away from your stated bedtime, and high-priority tasks or goals going untouched. Each insight shows its evidence and can be acknowledged or dismissed.
+- **Creating a project is now a guided wizard.** The New Project flow walks you through Identity → Provider → Plan → Skills → Plugins → Context → Scaffold. Only the first step is required. Mayva can interview you to draft planning docs, recommend skills and token-saving plugins, generate `CLAUDE.md` / agent context files, and let you choose exactly how the first commit is made (commit + push, commit local, or leave uncommitted). Everything is reviewable and skippable, and nothing leaves your machine.
+- **Projects can be created and cloned right from the Projects page.** A CREATE NEW PROJECT button scaffolds a fresh repo (optionally creating and pushing the matching remote), clones a repo from a connected GitHub/Bitbucket account, or clones any public repo by URL. Non-git folders dropped into your projects root now show up with a one-click **INIT GIT**.
+- **Goals and tasks can be linked to one or more projects.** Both the goal wizard and the task forms gain an optional projects picker; links round-trip through CSV import/export.
+- **Profile deep interview.** A DEEP INTERVIEW card on the Profile page runs an adaptive Q&A to fill the gaps the quick wizards can't reach, then shows a review screen before anything is written. Ask Mayva now uses the resulting briefing so its answers are calibrated to your role, priorities, and boundaries.
+- **Plugins inventory.** A new Plugins section in Settings lists token-saving CLIs and MCP servers, each with its install command, how it saves tokens, and a Detect button — kept separate from Skills, and never installed without your say-so.
+
+### Fixed
+
+- **The coach scores sleep for Whoop users.** Whoop-only users no longer see a perpetual "no data" health score — the coach now reads Whoop's sleep when a session isn't available.
+- **Mayva restores your last view after a reload or relaunch** instead of dropping you on the home view.
+- **The coach card no longer shows a duplicate streak pill.**
+
+### Changed
+
+- **The in-app voice button is hidden for now.** The floating mic icon and the voice overlay no longer appear; the standalone `pnpm voice` command is unaffected.
+- **The Insights page no longer repeats your pending tasks** — neglected tasks and goals live in Control Centre, so Insights reads as a coach catching patterns rather than a second to-do list.
+- **Control Centre is now the default landing view** for fresh installs; your last-visited view still restores after reloads.
+
+---
+
+## [0.7.1] — 2026-06-10
+
+### Fixed
+
+- **Bitbucket workspace dropdown works again.** Atlassian retired a second workspace-listing endpoint as part of the same deprecation round that broke the first one — both `/workspaces?role=member` and `/user/permissions/workspaces` now return HTTP 410. Mayva has been moved over to the currently-live `/user/workspaces` endpoint, so the workspace pickers on both the Projects clone card and the Bitbucket integration tile populate cleanly again.
+- **Skills dedupe catches more duplicates this time.** The grouping logic now normalises URLs (collapses GitHub `blob` ↔ `raw.githubusercontent.com` forms, strips query strings + trailing slashes), repo identifiers (strips `https://github.com/` / `.git` / case), and skill names (strips all punctuation + whitespace + casing) before comparing. A new third pass also collapses the same skill name across two different repos owned by the same GitHub org. Re-running `[DEDUPE]` after the upgrade picks up the extra duplicates the v0.7.0 planner missed.
+
+---
+
+## [0.7.0] — 2026-06-10
+
+### New
+
+- **Connect a local LLM in one card.** `Settings → Integrations → LLM` now opens with a **LOCAL LLM** tile at the top of the grid — paste an OpenAI-compatible endpoint (Ollama, LM Studio, vLLM, llama.cpp), the model name, and an optional API key. A `[SEND TEST MESSAGE]` button hits the endpoint once and shows the reply, response time, and token count inline so you can confirm it's wired before saving. An ADVANCED panel exposes timeout, temperature, max tokens, streaming, SSL verification, custom headers, and tool / vision feature flags. Your API key is stored in the OS keychain.
+
+- **User-managed RSS feeds in News.** A new `[MANAGE FEEDS]` button in the News header opens a modal where you paste any RSS or Atom URL, name it, and tag it with one or more interest categories (Geopolitics, India, Tech, Startups, Business, Science). A `[TEST]` button confirms the feed is live by showing the first three item titles before you commit. Mayva pulls every enabled feed every four hours and routes items into the same News list as your curated topics. A status pill on each feed row turns rose when the last fetch failed, and an `[ENABLED] / [DISABLED]` toggle pauses ingestion without deleting the row.
+
+- **Clone-from-remote dropdowns auto-populate from your connected providers.** The Projects view's CLONE FROM REMOTE card replaces the two free-text boxes with real dropdowns — `Workspace / Owner` lists every Bitbucket workspace and every GitHub org you belong to; `Repo slug` is a typeahead populated from your recently-active repos for the picked owner. No more remembering the exact slug.
+
+- **One-click "Clear my data" in Settings → Account.** A new DANGER ZONE card at the bottom of the Account view opens a modal that wipes every Mayva-managed surface on this machine — all API keys, OAuth tokens, and SSH keys in the OS keychain; every goal, task, skill, chat session, audit row, PR review, and cached headline in the local database; every integration's stored config; every workspace and projects-root setting; the `~/.mayva/.env` file; and the markdown profile tree. Backup snapshots are kept by default (optional checkbox wipes them too). Three required affordances — two acknowledgement checkboxes plus a `type RESET to confirm` text input — gate the button. After the wipe Mayva relaunches itself into a fresh-install shell so the onboarding wizard runs on the next boot.
+
+- **One-click Skills dedupe.** Running `[IMPORT SEED PACK]` more than once (or importing all three source repos) leaves the library with duplicate skills under different role buckets. A new `[DEDUPE]` button beside `[IMPORT SEED PACK]` scans your library, shows a preview ("Will remove 612 duplicates, keep 2796 — Apply?"), and on confirm removes the duplicates while keeping the best copy (custom > trending > recommended > most stars > earliest import). Custom skills are never touched.
+
+### Changed
+
+- **Settings → LOGS and Settings → AUDIT are now one entry: Settings → ACTIVITY.** Both surfaces survive — the new section has a `LOGS / AUDIT` sub-tab strip with live row counts on each tab. The strip remembers the last-active sub-tab so reopening Settings → ACTIVITY lands you back where you were. Saves a row in the Settings left nav.
+
+- **Control Centre is quieter.** The `M.A.Y.V.A · SYSTEMS` bar at the top of Control Centre has been retired so the operational widgets get the full vertical canvas.
+
+- **Diagnostics is leaner.** The `SYSTEM INFO` block (OS / CPU / RAM read-outs) has been removed from Settings → Diagnostics; the surfaces that matter (worker status, scheduler health, integration probes) get the focus.
+
+### Fixed
+
+- **Bitbucket workspace listing works again.** Atlassian deprecated `GET /workspaces?role=member` (server returns HTTP 410 Gone with `CHANGE-2770`). Mayva now lists workspaces via `GET /user/permissions/workspaces` — the dropdown on the Projects clone card and the workspace pickers on the Bitbucket connector tile both populate cleanly again.
+
+### Heads-up for the next release
+- **Fitbit still needs to be reconnected before September 2026.** Same heads-up carried forward from 0.5.0 / 0.6.0; Mayva will ship a one-click "RE-AUTHENTICATE WITH GOOGLE" prompt before the deadline.
+
+---
+
+## [0.6.0] — 2026-06-09
+
+### New
+
+- **Skills — a curated markdown library, browsable by role.** New `Settings → SKILLS` section. Hit `[IMPORT SEED PACK]` once and Mayva pulls **3 408 skills** from three curated GitHub repos (`ComposioHQ/awesome-claude-skills`, `alirezarezvani/claude-skills`, `ihlamury/design-skills`), sorts them across 19 role buckets (Product Manager · UX · Design · Frontend · Backend · DevOps · InfoSec · QA · Marketing · Sales · …), and stamps each card with the source repo's GitHub stars (`★ 17.5k`). Search across name + description + tags + source repo; filter by role, minimum stars, or source repo; pin any skill as **Trending** (colourful flame) or **Recommended** (verified-check) to find it again later. Add your own skill three ways — paste markdown, pick a `.md` file, or paste a GitHub URL to a `.md` file (Mayva fetches + parses it for you). Custom skills live under a separate `Custom` role so they don't mix with the curated taxonomy. Imported skills are read-only; you can delete them or pin them as Trending / Recommended, but body edits are blocked.
+
+- **GitHub, Cloudflare, and AWS integrations.** Three new cards in `Settings → Integrations → Productivity Tools`:
+  - **GitHub** — paste your Personal Access Token + (optionally) an SSH key pair. Powers the new clone-from-remote + raise-context-PR flow in Projects.
+  - **Cloudflare** — paste your account ID + a scoped API token. The Settings card shows whether `wrangler` is installed; when it is, you can orchestrate workflows / deployments from inside Mayva.
+  - **AWS** — paste your IAM Access Key ID + Secret (and Session Token for STS keys). Mayva validates them against AWS's identity service and shows your account ID + ARN. When `aws` is on your PATH, the same generic runner powers any subcommand you'd type in a terminal.
+
+- **Clone a repo from GitHub or Bitbucket and raise a "context PR" with the generated docs.** New flows on the Projects view: a **CLONE FROM REMOTE** card lets you paste a GitHub / Bitbucket `owner/repo` and Mayva fetches it via SSH into your projects root. After running the bootstrap, **`[OPEN CONTEXT PR]`** on each repo card commits the generated `CLAUDE.md` + `docs/*` + `rules/*` on a fresh branch, pushes via SSH, and opens a pull request through GitHub / Bitbucket's REST API. Your private SSH key never leaves your machine — Mayva materialises it into a per-run temp directory with strict permissions and wipes the directory immediately after every git command.
+
+- **Goals + Tasks — sort, filter, and round-trip to CSV.** Each pane header gets two compact dropdowns: a **sort selector** (`Due · Crit` by default — deadline then criticality) and a **deadline-window filter** (`Any due` default, then `Overdue` · `Today` · `≤ 3d` · `≤ 7d` · `≤ 15d` · `≤ 30d` · `≤ 60d` · `≤ 90d`). New `EXPORT` / `IMPORT` pills round-trip every active goal + every task to a single CSV — edit it in a spreadsheet, re-import, and rows with the same id update in place rather than duplicating. Tasks that don't have their own deadline automatically inherit the linked goal's deadline at import time. Archiving a goal now also removes every task linked to it (with the count surfaced in the toast: "Archived + 12 tasks") so you never end up with orphaned tasks pointing at a hidden goal.
+
+- **PR Review now lives inside Tasks as a "Code Reviews" pill.** The dedicated `PR REVIEW` rail entry is retired — reviews now sit alongside the work-context they describe at `TASKS → Code Reviews`, beside the existing `General` and `JIRA` pills. The surface itself is unchanged: same filter strip, same DIFF / REVIEW / HISTORY tabs, same action set.
+
+- **Bitbucket connect now also accepts an SSH key pair.** Optional fields below the existing API-token section. Stored in your OS keychain alongside the token; powers the new clone + open-context-PR flow above.
+
+### Changed
+- **Projects header reads "BUILD CONTEXT INTELLIGENCE"** instead of `PROJECTS · CONTEXT BOOTSTRAP` — clearer description of what the action actually does.
+- **"Take the tour" moved to the top-right of Settings as a small link.** Used to sit inside each section's title card styled as a button; now hoisted out as a global Settings utility link. Still Settings-only — other views don't surface it.
+
+### Heads-up for the next release
+- **Fitbit still needs to be reconnected before September 2026.** Same heads-up carried forward from 0.5.0; Mayva will ship a one-click "RE-AUTHENTICATE WITH GOOGLE" prompt before the deadline.
+
+---
+
+## [0.5.0] — 2026-06-07
+
+### New
+- **Mayva now talks to seven new health platforms.** `Settings → Integrations → Health Devices` lights up cards for **Fitbit · Withings · Oura · Strava · Garmin · Polar · Hevy** alongside the existing Whoop. Connect any of them and Mayva starts pulling your data on a half-hour rhythm — steps, sleep stages, HRV, resting HR, weight, body composition, blood pressure, SpO2, readiness, workouts with maps, strength sessions with set / rep / volume detail. Most use one-click OAuth (a browser tab opens, you grant access, you're back in Mayva). Garmin uses email + password + your 6-digit MFA code because Garmin has no consumer OAuth. Hevy uses a single API key you paste once.
+- **One canonical view across every wearable.** Even if two devices report the same metric (Oura HRV at 06:30 vs Garmin HRV at 06:30), Mayva keeps both with full attribution. A new Provider Priority surface lets you say "for HRV, trust Oura; for steps, trust Garmin" — the unified Health view honours that choice. If you don't set a preference, Mayva uses whichever provider synced most recently.
+- **Projects tab — pick a folder of repos, get LLM-generated context files.** New `Projects` rail entry. Point Mayva at your projects root (`~/code` or wherever); it scans for git repos, detects each one's tech stack, and one-click runs your active LLM CLI (Claude Code / Gemini / Codex) on each repo to generate a standard context bundle — `CLAUDE.md`, `docs/architecture.md`, `docs/api-reference.md`, `docs/database-schema.md`, `docs/business-logic.md`, `rules/ai-dev.md`. Live progress per repo, cancel mid-run, badges flip green as files land.
+- **PR Review tab — review pull requests with an LLM second opinion.** New `PR Review` rail entry (gated on Bitbucket connection). Pick a PR, see the diff rendered natively (unified or side-by-side), click a line to leave an inline comment, and run an LLM review against the diff + commit log. Five action buttons under the review body — `[APPROVE]` · `[REQUEST CHANGES]` · `[DECLINE]` · `[ADD INLINE COMMENT]` · `[RE-REVIEW]` — each one routes through the approval ledger so you confirm before anything posts. The HISTORY tab shows every previous review for the same PR, including re-review chains ("REQUESTED CHANGES → re-reviewed after 3 new commits → APPROVED").
+- **Bitbucket integration.** Settings → Integrations → Productivity Tools → Bitbucket. Workspace + email + Atlassian API token (the same token type JIRA uses, since both are Atlassian products now). Powers the PR Review surface.
+- **Settings reorganised under one INTEGRATIONS section.** LLM providers, Health Devices, Productivity Tools, and Notification channels now share a single left-nav entry with sub-tabs. Each integration is a card with the real brand logo, a status pulse, and a click-to-manage modal. LLM providers got the same card treatment — Anthropic, OpenAI, Gemini, Claude Code CLI, Gemini CLI, Codex CLI, plus an `ADD A LOCAL LLM` `[COMING SOON]` tile for the next inference backend (Ollama / LM Studio / llama.cpp).
+- **Audit moved under Settings.** The old `AUDIT` rail entry is gone; the same action-ledger surface now lives at `Settings → AUDIT` between LOGS and BACKUP. The rail carries only the daily-operational surfaces.
+
+### Fixed
+- **App opens noticeably faster on slow networks.** A blocking network call to Mayva's cloud env service used to gate the entire boot — on a flaky connection the window stayed dark for 5–10 seconds while the OS waited for a TCP timeout. The call now runs in the background while the window opens immediately.
+- **Bitbucket connect was asking for an "app password"; it now asks for an "API token" (the correct credential).** Atlassian deprecated Bitbucket app passwords in 2025; the modal now points at id.atlassian.com → API tokens, matching the JIRA flow. If you connected Bitbucket on the previous build, your existing credential keeps working — no need to re-enter.
+- **JIRA tab — split-pane resize finally works through the rendered HTML iframe.** Dragging the divider between the issue list and the detail pane now tracks the cursor smoothly even when the cursor crosses the embedded comment-renderer.
+- **JIRA tab — wide issue summaries don't blow out the list layout.** Long titles truncate at ~7 words / 60 characters with an ellipsis; hover the row for the full text. The right-pane detail always shows the unabridged summary.
+- **GitHub Actions deploys no longer run automatically on every push.** A trigger that was burning minutes on the GitHub Free plan has been moved to manual-only. Tagged releases still build the macOS DMG.
+
+### Heads-up for the next release
+- **Fitbit will need to be reconnected before September 2026.** Fitbit announced on 2026-06-07 that the legacy `api.fitbit.com` Web API is being deprecated in September 2026 in favour of the new Google Health API. Your existing Fitbit connection keeps working through the cutover (Fitbit honours the legacy traffic until sunset), and Mayva will ship a one-click "RE-AUTHENTICATE WITH GOOGLE" prompt in Settings before the deadline. No action needed today.
+
+---
+
 ## [0.4.6] — 2026-06-06
 
 ### New
